@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LinkWithClicks } from '../types/links';
+import { LinkWithClicks } from '../types/links'; 
 
 export default function Dashboard() {
   const [links, setLinks] = useState<LinkWithClicks[]>([]);
 
     const fetchLinks = async () => {
-        const res = await fetch('/api/links');
+        const res = await fetch('/api/test/links');
             const data = await res.json();
                 setLinks(data);
                   };
