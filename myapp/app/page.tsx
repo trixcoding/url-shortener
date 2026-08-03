@@ -4,77 +4,93 @@ import { useState } from 'react';
 
 export default function Home() {
   const [url, setUrl] = useState('');
-    const [result, setResult] = useState<{ code: string; shortUrl: string } | null>(null);
-      const [error, setError] = useState('');
-        const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ code: string; shortUrl: string } | null>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-          const handleSubmit = async (e: React.FormEvent) => {
-              e.preventDefault();
-                  setError('');
-                      setResult(null);
-                          setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setResult(null);
+    setLoading(true);
 
-                              try {
-                                    const res = await fetch('/api/test/links', {
-                                            method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ originalUrl: url }),
-                                                                  });
+    try {
+      const res = await fetch('/api/links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ originalUrl: url }),
+      });
+      const data = await res.json();
 
-                                                                        const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? 'خطایی رخ داد');
+      } else {
+        setResult(data);
+        setUrl('');
+      }
+    } catch {
+      setError('اتصال برقرار نشد');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                                                                              if (!res.ok) {
-                                                                                      setError(data.error ?? 'خطایی رخ داد');
-                                                                                            } else {
-                                                                                                    setResult(data);
-                                                                                                            setUrl('');
-                                                                                                                  }
-                                                                                                                      } catch {
-                                                                                                                            setError('اتصال برقرار نشد');
-                                                                                                                                } finally {
-                                                                                                                                      setLoading(false);
-                                                                                                                                          }
-                                                                                                                                            };
+  const copyToClipboard = () => {
+    if (result) navigator.clipboard.writeText(result.shortUrl);
+  };
 
-                                                                                                                                              const copyToClipboard = () => {
-                                                                                                                                                  if (result) navigator.clipboard.writeText(result.shortUrl);
-                                                                                                                                                    };
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">لینک کوتاه‌کن</h1>
+        <p className="text-gray-500 mb-6">آدرس طولانی رو بده، کوتاهش کن</p>
 
-                                                                                                                                                      return (
-                                                                                                                                                          <div style={{ maxWidth: '500px', margin: '4rem auto', padding: '1rem' }}>
-                                                                                                                                                                <h1>لینک کوتاه‌کن</h1>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="url"
+            placeholder="https://example.com/..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg px-5 py-2.5 transition"
+          >
+            {loading ? '...' : 'کوتاه کن'}
+          </button>
+        </form>
 
-                                                                                                                                                                      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                                                                                                                                                                              <input
-                                                                                                                                                                                        type="url"
-                                                                                                                                                                                                  placeholder="آدرس طولانی رو وارد کن"
-                                                                                                                                                                                                            value={url}
-                                                                                                                                                                                                                      onChange={(e) => setUrl(e.target.value)}
-                                                                                                                                                                                                                                required
-                                                                                                                                                                                                                                          style={{ flex: 1, padding: '0.5rem' }}
-                                                                                                                                                                                                                                                  />
-                                                                                                                                                                                                                                                          <button type="submit" disabled={loading}>
-                                                                                                                                                                                                                                                                    {loading ? '...' : 'کوتاه کن'}
-                                                                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                                                                                  </form>
+        {error && <p className="text-red-500 mt-3 text-sm">{error}</p>}
 
-                                                                                                                                                                                                                                                                                        {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
+        {result && (
+          <div className="mt-5 border border-gray-200 rounded-lg p-4 bg-gray-50 flex items-center justify-between gap-3">
+            <a
+              href={result.shortUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-600 font-medium truncate hover:underline"
+            >
+              {result.shortUrl}
+            </a>
+            <button
+              onClick={copyToClipboard}
+              className="text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md px-3 py-1.5 shrink-0 transition"
+            >
+              کپی
+            </button>
+          </div>
+        )}
 
-                                                                                                                                                                                                                                                                                              {result && (
-                                                                                                                                                                                                                                                                                                      <div style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ccc' }}>
-                                                                                                                                                                                                                                                                                                                <p>لینک کوتاه شما:</p>
-                                                                                                                                                                                                                                                                                                                          <a href={result.shortUrl} target="_blank" rel="noreferrer">
-                                                                                                                                                                                                                                                                                                                                      {result.shortUrl}
-                                                                                                                                                                                                                                                                                                                                                </a>
-                                                                                                                                                                                                                                                                                                                                                          <button onClick={copyToClipboard} style={{ marginRight: '1rem' }}>
-                                                                                                                                                                                                                                                                                                                                                                      کپی
-                                                                                                                                                                                                                                                                                                                                                                                </button>
-                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                              )}
-
-                                                                                                                                                                                                                                                                                                                                                                                                    <a href="/dashboard" style={{ display: 'block', marginTop: '2rem' }}>
-                                                                                                                                                                                                                                                                                                                                                                                                            مشاهده‌ی داشبورد →
-                                                                                                                                                                                                                                                                                                                                                                                                                  </a>
-                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                        );
-                                                                                                                                                                                                                                                                                                                                                                                                                        }
+        <a
+          href="/dashboard"
+          className="block mt-8 text-center text-blue-600 hover:underline font-medium"
+        >
+          مشاهده‌ی داشبورد ←
+        </a>
+      </div>
+    </div>
+  );
+}
