@@ -18,9 +18,19 @@ export default async function DashboardPage() {
   );
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>داشبورد لینک‌ها</h1>
-      <LiveClicksTable initialLinks={links} />
+    <div className="min-h-screen bg-white px-4 py-10">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">داشبورد لینک‌ها</h1>
+          <a
+            href="/"
+            className="text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 transition"
+          >
+            + لینک جدید
+          </a>
+        </div>
+        <LiveClicksTable initialLinks={links} />
+      </div>
     </div>
   );
 }
