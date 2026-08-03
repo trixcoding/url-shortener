@@ -42,8 +42,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1 text-right">لینک کوتاه‌کن</h1>
-        <p className="text-right text-gray-500 mb-6">آدرس طولانی رو بده، کوتاهش کن</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">لینک کوتاه‌کن</h1>
+        <p className=" text-gray-500 mb-6">آدرس طولانی رو بده، کوتاهش کن</p>
 
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
@@ -63,7 +63,7 @@ export default function Home() {
           </button>
         </form>
 
-        {error && <p className="text-right text-red-500 mt-3 text-sm">{error}</p>}
+        {error && <p className="text-red-500 mt-3 text-sm">{error}</p>}
 
         {result && (
           <div className="mt-5 border border-gray-200 rounded-lg p-4 bg-gray-50 flex items-center justify-between gap-3">
