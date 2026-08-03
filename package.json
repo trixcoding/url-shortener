@@ -3,5 +3,8 @@
     "@upstash/redis": "^1.38.1",
     "nanoid": "^6.0.1",
     "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.20.3"
   }
 }
