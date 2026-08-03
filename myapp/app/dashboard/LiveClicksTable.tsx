@@ -13,7 +13,7 @@ export default function LiveClicksTable({
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const res = await fetch('/api/links');
+      const res = await fetch('/api/test/links');
       const data = await res.json();
       setLinks(data);
     }, 4000);
