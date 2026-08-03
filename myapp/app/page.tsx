@@ -63,7 +63,7 @@ export default function Home() {
           </button>
         </form>
 
-        {error && <p className="text-red-500 mt-3 text-sm">{error}</p>}
+        {error && <p className="text-right text-red-500 mt-3 text-sm">{error}</p>}
 
         {result && (
           <div className="mt-5 border border-gray-200 rounded-lg p-4 bg-gray-50 flex items-center justify-between gap-3">
