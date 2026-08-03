@@ -7,7 +7,7 @@ export async function GET(
     ) {
       const { code } = await params;
 
-        // ۱. اول از Redis بخون
+       
           const cached = await redis.get<string>(`link:${code}`);
 
             if (cached) {
@@ -15,7 +15,7 @@ export async function GET(
                     return NextResponse.redirect(cached);
                       }
 
-                        // ۲. Cache Miss → برو سراغ Postgres
+                        
                           const result = await pool.query(
                               'SELECT original_url FROM links WHERE code = $1',
                                   [code]
@@ -27,7 +27,7 @@ export async function GET(
 
                                               const originalUrl: string = result.rows[0].original_url;
 
-                                                // برگردوندنش توی کش برای دفعه‌ی بعد
+                                             
                                                   await redis.set(`link:${code}`, originalUrl);
                                                     redis.incr(`clicks:${code}`);
 
