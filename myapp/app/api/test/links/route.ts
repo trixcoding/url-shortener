@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
           if (count === 1) {
               await redis.expire(rateLimitKey, 60); // ۶۰ ثانیه
                 }
-                  if (count > 10) {
+                  if (count > 2) {
                       return NextResponse.json(
                             { error: 'تعداد درخواست‌ها بیش از حد مجاز است' },
                                   { status: 429 }
