@@ -1,7 +1,7 @@
 import pool from '../lib/db';
 import redis from '../lib/redis';
 import LiveClicksTable from './LiveClicksTable';
-import { LinkWithClicks } from '../../types/links';
+import { LinkWithClicks } from '../types/links';
 
 export default async function DashboardPage() {
   const result = await pool.query(
