@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LinkWithClicks } from '../types/link';
+import { LinkWithClicks } from '../types/links';
 
 export default function LiveClicksTable({
   initialLinks,
