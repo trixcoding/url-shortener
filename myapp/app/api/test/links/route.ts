@@ -23,12 +23,11 @@ export async function GET() {
                                                                           return NextResponse.json(links);
                                                                           }
 export async function POST(req: NextRequest) {
-  // ۱. Rate limiting: هر IP فقط ۱۰ درخواست در دقیقه
-    const ip = req.headers.get('x-forwarded-for') ?? 'unknown';
+  const ip = req.headers.get('x-forwarded-for') ?? 'unknown';
       const rateLimitKey = `ratelimit:create:${ip}`;
         const count = await redis.incr(rateLimitKey);
           if (count === 1) {
-              await redis.expire(rateLimitKey, 120); // ۶۰ ثانیه
+              await redis.expire(rateLimitKey, 120); // 
                 }
                   if (count > 4) {
                       return NextResponse.json(
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
                                       );
                                         }
 
-                                          // ۲. اعتبارسنجی ورودی
+                                          
                                             const body = await req.json();
                                               const originalUrl = body.originalUrl;
                                                 if (!originalUrl || typeof originalUrl !== 'string') {
@@ -49,14 +48,14 @@ export async function POST(req: NextRequest) {
                                                                   return NextResponse.json({ error: 'فرمت URL درست نیست' }, { status: 400 });
                                                                     }
 
-                                                                      // ۳. ساخت کد یکتا و ذخیره در Postgres
+                                                                  
                                                                         const code = generateCode();
                                                                           await pool.query(
                                                                               'INSERT INTO links (code, original_url) VALUES ($1, $2)',
                                                                                   [code, originalUrl]
                                                                                     );
 
-                                                                                      // ۴. کش کردن در Redis (Cache-Aside نوشتن)
+                                                                                 
                                                                                         await redis.set(`link:${code}`, originalUrl);
 
                                                                                           return NextResponse.json({
