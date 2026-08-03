@@ -14,3 +14,9 @@ export interface Link {
                   code: string;
                     shortUrl: string;
                     }
+export interface LinkWithClicks {
+    code: string;
+      originalUrl: string;
+        createdAt: string;
+          clicks: number;
+          }
