@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">لینک کوتاه‌کن</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">لینکتو کوتاه کن</h1>
         <p className=" text-gray-500 mb-6">آدرس طولانی رو بده، کوتاهش کن</p>
 
         <form onSubmit={handleSubmit} className="flex gap-2">

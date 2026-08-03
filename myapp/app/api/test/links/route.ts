@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
       const rateLimitKey = `ratelimit:create:${ip}`;
         const count = await redis.incr(rateLimitKey);
           if (count === 1) {
-              await redis.expire(rateLimitKey, 60); // ۶۰ ثانیه
+              await redis.expire(rateLimitKey, 120); // ۶۰ ثانیه
                 }
-                  if (count > 2) {
+                  if (count > 4) {
                       return NextResponse.json(
                             { error: 'تعداد درخواست‌ها بیش از حد مجاز است' },
                                   { status: 429 }
