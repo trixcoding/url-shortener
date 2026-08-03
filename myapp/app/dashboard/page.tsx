@@ -1,44 +1,26 @@
-'use client';
+import pool from '../lib/db';
+import redis from '../lib/redis';
+import LiveClicksTable from './LiveClicksTable';
+import { LinkWithClicks } from '../../types/links';
 
-import { useEffect, useState } from 'react';
-import { LinkWithClicks } from '../types/links'; 
+export default async function DashboardPage() {
+  const result = await pool.query(
+    'SELECT code, original_url, created_at FROM links ORDER BY created_at DESC'
+  );
 
-export default function Dashboard() {
-  const [links, setLinks] = useState<LinkWithClicks[]>([]);
+  const links: LinkWithClicks[] = await Promise.all(
+    result.rows.map(async (row) => ({
+      code: row.code,
+      originalUrl: row.original_url,
+      createdAt: row.created_at,
+      clicks: (await redis.get<number>(`clicks:${row.code}`)) ?? 0,
+    }))
+  );
 
-    const fetchLinks = async () => {
-        const res = await fetch('/api/test/links');
-            const data = await res.json();
-                setLinks(data);
-                  };
-
-                    useEffect(() => {
-                        fetchLinks();
-                            const interval = setInterval(fetchLinks, 4000); // رفرش هر ۴ ثانیه
-                                return () => clearInterval(interval);
-                                  }, []);
-
-                                    return (
-                                        <div style={{ padding: '2rem' }}>
-                                              <h1>داشبورد لینک‌ها</h1>
-                                                    <table style={{ width: '100%', marginTop: '1rem' }}>
-                                                            <thead>
-                                                                      <tr>
-                                                                                  <th>کد</th>
-                                                                                              <th>آدرس اصلی</th>
-                                                                                                          <th>کلیک‌ها</th>
-                                                                                                                    </tr>
-                                                                                                                            </thead>
-                                                                                                                                    <tbody>
-                                                                                                                                              {links.map((link) => (
-                                                                                                                                                          <tr key={link.code}>
-                                                                                                                                                                        <td>{link.code}</td>
-                                                                                                                                                                                      <td>{link.originalUrl}</td>
-                                                                                                                                                                                                    <td>{link.clicks}</td>
-                                                                                                                                                                                                                </tr>
-                                                                                                                                                                                                                          ))}
-                                                                                                                                                                                                                                  </tbody>
-                                                                                                                                                                                                                                        </table>
-                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                              );
-                                                                                                                                                                                                                                              }
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h1>داشبورد لینک‌ها</h1>
+      <LiveClicksTable initialLinks={links} />
+    </div>
+  );
+}
