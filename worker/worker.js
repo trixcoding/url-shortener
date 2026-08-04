@@ -3,7 +3,7 @@ import IORedis from 'ioredis';
 import { Pool } from 'pg';
 import { scheduleNightlyCleanup } from './queue.js';
 
-const connection = new IORedis(process.env.REDIS_URL, {
+const connection = new IORedis(process.env.REDISS_URL, {
   maxRetriesPerRequest: null,
   tls: {},
 });
