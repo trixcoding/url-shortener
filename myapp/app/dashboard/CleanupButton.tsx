@@ -1,17 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CleanupButton() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
   const [jobId, setJobId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (status === 'done' || status === 'error') {
+      const timer = setTimeout(() => {
+        setStatus('idle');
+        setJobId(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   async function handleCleanup() {
     setStatus('loading');
+
     try {
-      const res = await fetch('/api/admin/cleanup', { method: 'POST' });
+      const res = await fetch('/api/admin/cleanup', {
+        method: 'POST',
+      });
+
       if (!res.ok) throw new Error('request failed');
+
       const data = await res.json();
+
       setJobId(data.jobId);
       setStatus('done');
     } catch {
@@ -26,7 +43,9 @@ export default function CleanupButton() {
         disabled={status === 'loading'}
         className="text-sm bg-gray-800 hover:bg-gray-900 disabled:opacity-50 text-white rounded-lg px-4 py-2 transition"
       >
-        {status === 'loading' ? 'در حال ارسال به صف...' : '⚙️ پاکسازی با BullMQ'}
+        {status === 'loading'
+          ? 'در حال ارسال به صف...'
+          : '⚙️ پاکسازی با BullMQ'}
       </button>
 
       {status === 'done' && (
@@ -34,8 +53,11 @@ export default function CleanupButton() {
           ✅ job #{jobId} ثبت شد — worker به‌زودی پردازش می‌کنه
         </p>
       )}
+
       {status === 'error' && (
-        <p className="text-xs text-red-600">❌ خطا در ثبت job</p>
+        <p className="text-xs text-red-600">
+          ❌ خطا در ثبت job
+        </p>
       )}
     </div>
   );
