@@ -30,12 +30,12 @@ export default function CleanupButton() {
       </button>
 
       {status === 'done' && (
-        <span className="text-xs text-green-600">
+        <p className="text-xs text-green-600">
           ✅ job #{jobId} ثبت شد — worker به‌زودی پردازش می‌کنه
-        </span>
+        </p>
       )}
       {status === 'error' && (
-        <span className="text-xs text-red-600">❌ خطا در ثبت job</span>
+        <p className="text-xs text-red-600">❌ خطا در ثبت job</p>
       )}
     </div>
   );
