@@ -2,8 +2,7 @@
 
 # dependencies
 /node_modules
-selseludomseludom
-pseludomseludom
+worker/node_modules
 .pnp.*
 .yarn/*
 !.yarn/patches
