@@ -10,16 +10,15 @@ const connection = new IORedis(process.env.REDISS_URL, {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, 
- });
+  ssl: { rejectUnauthorized: false },
+});
 
 const worker = new Worker(
   'cleanup',
   async (job) => {
     await pool.query('TRUNCATE TABLE links RESTART IDENTITY CASCADE');
-    const keys = await connection.keys('url:*');
-    if (keys.length) await connection.del(...keys);
-    console.log('پاکسازی انجام شد');
+    await connection.flushdb();
+    console.log('پاکسازی کامل انجام شد (Postgres + کل Redis)');
   },
   { connection }
 );
