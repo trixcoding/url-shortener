@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -84,12 +85,12 @@ export default function Home() {
           </div>
         )}
 
-        <a
+        <Link
           href="/dashboard"
           className="block mt-8 text-center text-blue-600 hover:underline font-medium"
         >
           مشاهده‌ی داشبورد ←
-        </a>
+        </Link>
       </div>
     </div>
   );
