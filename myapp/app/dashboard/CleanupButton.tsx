@@ -16,11 +16,11 @@ export default function CleanupButton() {
 
       const data = await res.json();
 
-      toast.success(`✅ job #${data.jobId} ثبت شد — worker به‌زودی پردازش می‌کنه`, {
+      toast.success(`job #${data.jobId} ثبت شد — worker به‌زودی پردازش می‌کنه`, {
         id: toastId,
       });
     } catch {
-      toast.error('❌ خطا در ثبت job', { id: toastId });
+      toast.error('خطا در ثبت job', { id: toastId });
     } finally {
       setLoading(false);
     }
