@@ -6,7 +6,7 @@ let cleanupQueue: Queue | undefined;
 
 export function getQueue(): Queue {
   if (!connection) {
-    connection = new IORedis(process.env.REDIS_URL as string, {
+    connection = new IORedis(process.env.REDISS_URL as string, {
       maxRetriesPerRequest: null,
       tls: {},
     });
