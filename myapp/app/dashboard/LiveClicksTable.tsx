@@ -9,22 +9,46 @@ export default function LiveClicksTable({
   initialLinks: LinkWithClicks[];
 }) {
   const [links, setLinks] = useState<LinkWithClicks[]>(initialLinks);
+  const [loading, setLoading] = useState(initialLinks.length === 0);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const res = await fetch('/api/test/links');
-      const data = await res.json();
-      setLinks(data);
-    }, 4000);
+    let isFirstFetch = true;
+
+    async function fetchLinks() {
+      try {
+        const res = await fetch('/api/test/links');
+        const data = await res.json();
+        setLinks(data);
+      } finally {
+        if (isFirstFetch) {
+          setLoading(false);
+          isFirstFetch = false;
+        }
+      }
+    }
+
+    if (initialLinks.length === 0) {
+      fetchLinks();
+    }
+
+    const interval = setInterval(fetchLinks, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [initialLinks.length]);
 
   const handleCopy = (code: string, shortUrl: string) => {
     navigator.clipboard.writeText(shortUrl);
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 1500);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (links.length === 0) {
     return <p className="text-gray-400 text-center py-10">هنوز لینکی ساخته نشده.</p>;
