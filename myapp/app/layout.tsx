@@ -30,21 +30,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <div className="flex-1">{children}</div>
-
-        <footer className="text-xs text-blue-600 text-center py-4 border-t border-blue-200">
-          ساخته شده توسط <a
-            href="https://mhmdnsr.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-blue-700 hover:text-blue-900 underline"
-          >MhmdNsr</a> | <a
-            href="https://t.me/mhmdnsrr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-700 hover:text-blue-900 underline"
-          >تلگرام</a>
-        </footer>
-
         <Toaster position="top-center" />
       </body>
     </html>
