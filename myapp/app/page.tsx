@@ -91,6 +91,12 @@ export default function Home() {
         >
           مشاهده‌ی داشبورد ←
         </Link>
+ <Link
+          href="/about"
+          className="block mt-8 text-center text-blue-600 hover:underline font-medium"
+        >
+          توضیح فنی ←
+        </Link>
       </div>
     </div>
   );
