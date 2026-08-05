@@ -93,9 +93,9 @@ export default function Home() {
         </Link>
  <Link
           href="/about"
-          className="block mt-8 text-center text-blue-600 hover:underline font-medium"
+          className="block mt-3 text-center text-sm text-gray-400 hover:text-blue-600 transition"
         >
-          توضیح فنی ←
+          توضیح فنی پروژه ←
         </Link>
       </div>
     </div>
